@@ -18,9 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F49C861-B8FC-4A7B-8A32-250D0D508930}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{FC2A4871-E8F3-453C-9941-8FB2D010AB24}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.production.override.yml = docker-compose.production.override.yml
 		docker-compose.production.yml = docker-compose.production.yml
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Global
@@ -48,6 +51,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{771BC930-CA36-4CC1-9C47-A694791E82AA} = {4F49C861-B8FC-4A7B-8A32-250D0D508930}
 		{C0845E9C-393C-4154-BF73-FCE2B9825D1C} = {771BC930-CA36-4CC1-9C47-A694791E82AA}
+		{FC2A4871-E8F3-453C-9941-8FB2D010AB24} = {4F49C861-B8FC-4A7B-8A32-250D0D508930}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5698FB60-E594-43DF-A115-9579A5005E0B}

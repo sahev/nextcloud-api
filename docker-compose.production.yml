@@ -13,7 +13,7 @@ services:
       - "5221:80"
     build:
       context: .
-      dockerfile: Api/Dockerfile
+      dockerfile: ./Dockerfile
     restart: always
 
 networks:
