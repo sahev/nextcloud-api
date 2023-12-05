@@ -24,4 +24,4 @@ ENV env_name $ASPNETCORE_ENVIRONMENT
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT dotnet Api.dll --environment=$env_name urls=http://0.0.0.0:80
+ENTRYPOINT dotnet NextCloud.Api.dll --environment=$env_name urls=http://0.0.0.0:80
