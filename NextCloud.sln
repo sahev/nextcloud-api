@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{FC2A48
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.production.override.yml = docker-compose.production.override.yml
 		docker-compose.production.yml = docker-compose.production.yml
+		docker-compose.staging.override.yml = docker-compose.staging.override.yml
+		docker-compose.staging.yml = docker-compose.staging.yml
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject

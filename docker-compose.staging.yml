@@ -1,14 +1,14 @@
 version: '3.4'
 
 services:
-  nextcloud-api-prd:
+  nextcloud-api-hml:
     image: ${DOCKER_REGISTRY-}
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       ASPNETCORE_URLS: "http://+:80"
     networks:
       apinetwork:
-        ipv4_address: 172.21.0.9
+        ipv4_address: 172.21.1.9
     ports:
       - "80:80"
     build:
@@ -22,4 +22,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.21.0.0/16
+        - subnet: 172.21.1.0/16

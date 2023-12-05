@@ -10,6 +10,7 @@ WORKDIR /src
 COPY ["NextCloud.Api/NextCloud.Api.csproj", "NextCloud.Api/"]
 COPY ["NextCloud.Core/NextCloud.Core.csproj", "NextCloud.Core/"]
 RUN dotnet restore "NextCloud.Api/NextCloud.Api.csproj"
+RUN dotnet restore "NextCloud.Core/NextCloud.Core.csproj"
 COPY . .
 WORKDIR "/src/NextCloud.Api"
 RUN dotnet build "NextCloud.Api.csproj" -c Release -o /app/build
