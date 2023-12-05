@@ -35,5 +35,5 @@ C# classes are provided for the objects you can send to or receive from the Next
 Some Api calls return a list of items (such as Group.List). These are returned as a subclass of ApiList<Group>. The Nextcloud api itself usually only returns the first few items in the list, and needs to be called again to return the next chunk of items. This is all done for you by ApiList - it has a method called All(Api) which will return an IEnumerable of the appropriate listed object. Enumerating the enumerable will return all the items in the first chunk, then call the Nextcloud api to get the next chunk, return them and so on. It hides all that work from the caller, while remaining as efficient as possible by only getting data when needed - for instance, using Linq calls like Any or First will stop getting data when the first item that matches the selection function is found.
 
 
-## Created By
+## Core Created By
 [Nikkilocke] (https://github.com/nikkilocke/NextcloudApi)
