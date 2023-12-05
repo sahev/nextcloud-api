@@ -1,0 +1,49 @@
+name: Release
+on:
+  push:
+    branches: [ release ]
+jobs:
+
+  building-repo:
+    name: checkout-repository
+    runs-on: ubuntu-latest
+    environment:
+      name: checkout
+    steps:
+    - name: Creating folders
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          mkdir -p /home/clinie/release ; cd /home/clinie/release
+          
+          if [ ! -d '${{ github.event.repository.name }}' ]; then git clone git@github.com:sahev/${{ github.event.repository.name }}.git; else echo 'repository ${{ github.event.repository.name }} already exists'; fi
+          
+          printf "\n\n updating repository....\n\n "
+
+          cd /home/clinie/release/${{ github.event.repository.name }}
+
+          git checkout -f release
+
+          git pull origin release
+
+        host: ${{ secrets.HOST }}
+        user: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SECRET_KEY }}
+
+  deploy-release:
+    name: deploy-release
+    needs: building-repo
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+    steps:
+    - name: building image
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd /home/clinie/release/${{ github.event.repository.name }}
+
+          sudo ASPNETCORE_ENVIRONMENT=Staging docker compose up --build -d
+        host: ${{ secrets.HOST }}
+        user: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SECRET_KEY }}

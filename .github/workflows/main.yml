@@ -1,0 +1,50 @@
+name: Main
+on:
+  #push:
+  #  branches: [ main ]
+  release:
+    types: [ published ]
+
+jobs:
+
+  building-repo:
+    name: checkout-repository
+    runs-on: ubuntu-latest
+    environment:
+      name: checkout
+    steps:
+    - name: Creating folders
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          mkdir -p /home/clinie/prd ; cd /home/clinie/prd
+
+          if [ ! -d '${{ github.event.repository.name }}' ]; then git clone git@github.com:sahev/${{ github.event.repository.name }}.git; else echo 'repository ${{ github.event.repository.name }} already exists'; fi
+          
+          cd /home/clinie/prd/${{ github.event.repository.name }}
+
+          git checkout -f main
+
+          git pull origin main
+
+        host: ${{ secrets.HOST }}
+        user: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SECRET_KEY }}
+
+  deploy-production:
+    name: deploy-production
+    needs: building-repo
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+    - name: building image
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd /home/clinie/prd/${{ github.event.repository.name }}
+
+          sudo ASPNETCORE_ENVIRONMENT=Production docker compose -f docker-compose.production.yml up --build -d
+        host: ${{ secrets.HOST }}
+        user: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SECRET_KEY }}
