@@ -10,7 +10,7 @@ services:
       apinetwork:
         ipv4_address: 172.21.1.9
     ports:
-      - "80:80"
+      - "5929:80"
     build:
       context: .
       dockerfile: ./Dockerfile
