@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NextCloud.Api.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace NextCloud.Api.Controllers
 {
@@ -27,12 +28,16 @@ namespace NextCloud.Api.Controllers
         }
 
         [HttpGet("{clinicId}")]
+        [SwaggerOperation(Summary = "Get shared file info by shareId")]
+        [SwaggerResponse(200, null, typeof(Share))]
         public async Task<IActionResult> GetByShareId([FromRoute(Name = "shareId")] string shareId)
         {
             return Ok(await Share.Get(_nextCloudService, shareId));
         }
 
         [HttpPost("{clinicId}/patient/{patientId}/create")]
+        [SwaggerOperation(Summary = "Create file share info")]
+        [SwaggerResponse(200, null, typeof(Share))]
         public async Task<IActionResult> CreateClinicShare([FromRoute(Name = "clinicId")] Guid clinicId, [FromRoute(Name = "patientId")] Guid patientId, [FromQuery(Name = "filename")] string filename)
         {
             var path = $"{clinicId}/{patientId}/{filename}";

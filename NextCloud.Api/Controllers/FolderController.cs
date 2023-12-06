@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace NextCloud.Api.Controllers
 {
@@ -26,6 +27,8 @@ namespace NextCloud.Api.Controllers
         }
 
         [HttpGet("{clinicId}")]
+        [SwaggerOperation(Summary = "Get clinic or patient files")]
+        [SwaggerResponse(200, null, typeof(List<CloudInfo>))]
         public async Task<IActionResult> GetClinicFiles([FromRoute(Name = "clinicId")] Guid clinicId, [FromQuery(Name = "patientId")] Guid patientId)
         {
             if (patientId == Guid.Empty)
@@ -35,6 +38,8 @@ namespace NextCloud.Api.Controllers
         }
 
         [HttpPost("{clinicId}/create")]
+        [SwaggerOperation(Summary = "Create clinic repository", Description = "Called from smart-clinic-api on create clinic flow")]
+        [SwaggerResponse(200)]
         public async Task<IActionResult> CreateClinicRepository([FromRoute(Name = "clinicId")] Guid clinicId)
         {
             var pathClinic = _settings.Username + $"/{clinicId}";
@@ -52,6 +57,8 @@ namespace NextCloud.Api.Controllers
         }
 
         [HttpPost("{clinicId}/patient/{patientId}/create")]
+        [SwaggerOperation(Summary = "Create patient repository", Description = "Called from smart-clinic-api on create patient flow")]
+        [SwaggerResponse(200)]
         public async Task<IActionResult> CreatePatientRepository([FromRoute(Name = "clinicId")] Guid clinicId, [FromRoute(Name = "patientId")] Guid patientId)
         {
             var pathPatient = _settings.Username + $"/{clinicId}/{patientId}";

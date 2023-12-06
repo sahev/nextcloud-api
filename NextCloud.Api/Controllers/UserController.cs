@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace NextCloud.Api.Controllers
 {
@@ -26,6 +27,8 @@ namespace NextCloud.Api.Controllers
         }
 
         [HttpPost()]
+        [SwaggerOperation(Summary = "Create user login on cloud")]
+        [SwaggerResponse(200)]
         public async Task<IActionResult> CreateUser([FromBody] UserInfo userInfo)
         {
             await NextCloud.User.Create(_nextCloudService, userInfo);
@@ -34,6 +37,8 @@ namespace NextCloud.Api.Controllers
         }
 
         [HttpGet()]
+        [SwaggerOperation(Summary = "Get cloud users")]
+        [SwaggerResponse(200)]
         public async Task<IActionResult> GetUsers()
         {
             return Ok(await NextCloud.User.List(_nextCloudService));

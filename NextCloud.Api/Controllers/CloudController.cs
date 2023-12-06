@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NextCloud.Api.Services;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 
 namespace NextCloud.Api.Controllers
@@ -28,35 +29,32 @@ namespace NextCloud.Api.Controllers
         }
 
         [HttpPost("{clinicId}/patient/{patientId}/upload")]
-        public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromRoute(Name = "clinicId")] Guid clinicId, [FromRoute(Name = "patientId")] Guid patientId)
+        [SwaggerOperation(Summary = "Upload file on patient repository")]
+        [SwaggerResponse(200, null, typeof(List<Share>))]
+        public async Task<IActionResult> Upload([FromForm] List<IFormFile> files, [FromRoute(Name = "clinicId")] Guid clinicId, [FromRoute(Name = "patientId")] Guid patientId)
         {
-            if (file == null || file.Length == 0)
+            if (files == null || files.Count == 0)
                 return BadRequest("Nenhum arquivo enviado.");
 
-            using var stream = file.OpenReadStream();
+            List<Share> shareFiles = new();
 
-            var path = _settings.Username + $"/{clinicId}/{patientId}";
-
-            await CloudFile.Upload(_nextCloudService, path + $"/{file.FileName}", stream);
-
-            var filePath = $"/{clinicId}/{patientId}/{file.FileName}";
-
-            var shareFile = await ShareServices.CreatePublicShare(_nextCloudService, filePath);
-
-            return Ok(shareFile);
-        }
-
-        [HttpGet("{clinicId}/patient/{patientId}/files")]
-        public async Task<IActionResult> GetClinicFiles([FromRoute(Name = "clinicId")] Guid clinicId, [FromRoute(Name = "patientId")] Guid patientId)
-        {
-            var list = await CloudFolder.List(_nextCloudService, _settings.Username + $"/{clinicId}/{patientId}", CloudInfo.Properties.All);
-
-            list.ForEach(item =>
+            foreach (var file in files)
             {
-                item.Preview = $"{_settings.ServerUri}apps/photos/api/v1/preview/{item.FileId}?etag={item.Tag.Replace("\"", "")}&x=128&y=128";
-            });
+                using (var stream = file.OpenReadStream())
+                {
+                    var path = _settings.Username + $"/{clinicId}/{patientId}";
 
-            return Ok(list);
+                    await CloudFile.Upload(_nextCloudService, path + $"/{file.FileName}", stream);
+
+                    var filePath = $"/{clinicId}/{patientId}/{file.FileName}";
+
+                    var shareFile = await ShareServices.CreatePublicShare(_nextCloudService, filePath);
+
+                    shareFiles.Add(shareFile);
+                }
+            }
+            
+            return Ok(shareFiles);
         }
     }
 }
