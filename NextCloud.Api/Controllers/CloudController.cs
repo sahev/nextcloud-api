@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using NextCloud.Api.Services;
 using System.Collections.Generic;
 
 namespace NextCloud.Api.Controllers
@@ -36,9 +37,13 @@ namespace NextCloud.Api.Controllers
 
             var path = _settings.Username + $"/{clinicId}/{patientId}";
 
-            var list = await CloudFile.Upload(_nextCloudService, path + $"/{file.FileName}", stream);
+            await CloudFile.Upload(_nextCloudService, path + $"/{file.FileName}", stream);
 
-            return Ok(list);
+            var filePath = $"/{clinicId}/{patientId}/{file.FileName}";
+
+            var shareFile = await ShareServices.CreatePublicShare(_nextCloudService, filePath);
+
+            return Ok(shareFile);
         }
 
         [HttpGet("{clinicId}/patient/{patientId}/files")]
