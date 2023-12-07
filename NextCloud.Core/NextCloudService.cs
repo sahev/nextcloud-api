@@ -32,7 +32,9 @@ namespace NextCloud
 		public NextCloudService(ISettings settings) {
 			Settings = settings;
 			_cookies = new CookieContainer();
-			_client = new HttpClient(new HttpClientHandler() { AllowAutoRedirect = false, CookieContainer = _cookies });
+			var clientHandler = new HttpClientHandler() { AllowAutoRedirect = false, CookieContainer = _cookies };
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            _client = new HttpClient(clientHandler);
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
