@@ -74,5 +74,20 @@ namespace NextCloud.Api.Controllers
             
             return Ok();
         }
+
+        [HttpDelete("{clinicId}/patient/{patientId}")]
+        [SwaggerOperation(Summary = "Delete patient file")]
+        [SwaggerResponse(200)]
+        public async Task<IActionResult> CreatePatientRepository(
+            [FromRoute(Name = "clinicId")] Guid clinicId, 
+            [FromRoute(Name = "patientId")] Guid patientId,
+            [FromQuery(Name = "fileName")] string fileName)
+        {
+            var pathPatient = _settings.Username + $"/{clinicId}/{patientId}/{fileName}";
+
+            await CloudFolder.Delete(_nextCloudService, pathPatient);
+
+            return Ok();
+        }
     }
 }
